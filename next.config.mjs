@@ -2,12 +2,17 @@
 const nextConfig = {
   experimental: {
     optimizePackageImports: ['swr', 'lucide-react', 'framer-motion'],
-    // Enable concurrent features for instant responses
     serverComponentsExternalPackages: ['sharp'],
   },
   
-  // Aggressive compression and optimization
-  compress: true,
+  // Disable static export completely for Render deployment
+  output: 'standalone',
+  
+  // Force all pages to be dynamic
+  trailingSlash: false,
+  
+  // Disable static generation
+  staticPageGenerationTimeout: 0,
   
   // Enable real-time WebSocket connections with performance headers
   async headers() {
@@ -93,12 +98,6 @@ const nextConfig = {
     STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
-  
-  // Output configuration for deployment - FIXED FOR RENDER
-  output: 'standalone',
-  
-  // Disable static export for dynamic routes
-  trailingSlash: false,
   
   // Reduce build time and improve performance
   swcMinify: true,
