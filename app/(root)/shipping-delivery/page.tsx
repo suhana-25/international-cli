@@ -1,12 +1,17 @@
+import { Suspense } from 'react'
 import { APP_NAME } from '@/lib/constants'
 import type { Metadata } from 'next'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Shipping | Delivery - ${APP_NAME}`,
   description: 'Learn about our shipping methods, delivery times, and policies for crystal carvings and handicrafts.',
 }
 
-export default function ShippingDeliveryPage() {
+function ShippingDeliveryPageContent() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -270,6 +275,14 @@ export default function ShippingDeliveryPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ShippingDeliveryPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <ShippingDeliveryPageContent />
+    </Suspense>
   )
 }
 

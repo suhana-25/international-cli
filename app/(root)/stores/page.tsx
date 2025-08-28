@@ -1,5 +1,10 @@
+import { Suspense } from 'react'
 import { APP_NAME } from '@/lib/constants'
 import type { Metadata } from 'next'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Global Stores - ${APP_NAME}`,
@@ -23,7 +28,7 @@ const countries = [
   { name: 'Netherlands', code: 'NL', available: true },
 ]
 
-export default function StoresPage() {
+function StoresPageContent() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -250,5 +255,13 @@ export default function StoresPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function StoresPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <StoresPageContent />
+    </Suspense>
   )
 }

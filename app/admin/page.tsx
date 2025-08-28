@@ -1,10 +1,15 @@
+import { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Package, ShoppingCart, Users, Settings, Plus, Eye, Edit, Trash } from 'lucide-react'
 import Link from 'next/link'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
 
-export default function AdminDashboard() {
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+function AdminDashboardContent() {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="mb-8">
@@ -196,5 +201,13 @@ export default function AdminDashboard() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function AdminDashboard() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <AdminDashboardContent />
+    </Suspense>
   )
 } 

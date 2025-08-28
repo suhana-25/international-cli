@@ -1,8 +1,12 @@
 import { Suspense } from 'react'
 import { redirect } from 'next/navigation'
 import AdminChatClient from './admin-chat-client'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
 
-export default async function AdminChatPage() {
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+async function AdminChatPageContent() {
   // Skip auth check for now
 
   return (
@@ -17,5 +21,13 @@ export default async function AdminChatPage() {
         <AdminChatClient adminId="admin" adminName="Admin" />
       </Suspense>
     </div>
+  )
+}
+
+export default function AdminChatPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <AdminChatPageContent />
+    </Suspense>
   )
 }

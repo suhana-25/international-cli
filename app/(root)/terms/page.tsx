@@ -1,6 +1,11 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { APP_NAME } from '@/lib/constants'
 import TermsPageClient from './terms-page-client'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Terms & Conditions - ${APP_NAME}`,
@@ -14,5 +19,9 @@ export const metadata: Metadata = {
 }
 
 export default function TermsPage() {
-  return <TermsPageClient />
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <TermsPageClient />
+    </Suspense>
+  )
 }

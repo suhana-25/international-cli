@@ -1,9 +1,12 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { APP_NAME } from '@/lib/constants'
 import AboutPageClient from './about-page-client'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `About Us - ${APP_NAME}`,
@@ -17,5 +20,9 @@ export const metadata: Metadata = {
 }
 
 export default function AboutPage() {
-  return <AboutPageClient />
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <AboutPageClient />
+    </Suspense>
+  )
 } 

@@ -1,11 +1,16 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { APP_NAME } from '@/lib/constants'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Refund Policy - ${APP_NAME}`,
 }
 
-export default function RefundPolicyPage() {
+function RefundPolicyPageContent() {
   return (
     <div className="max-w-4xl mx-auto py-8">
       <div className="space-y-6">
@@ -76,5 +81,13 @@ export default function RefundPolicyPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function RefundPolicyPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <RefundPolicyPageContent />
+    </Suspense>
   )
 } 

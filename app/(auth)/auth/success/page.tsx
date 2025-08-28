@@ -1,16 +1,21 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { APP_NAME } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { CheckCircle, ArrowRight, Shield, Users } from 'lucide-react'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Authentication Success - ${APP_NAME}`,
   description: 'Successfully authenticated',
 }
 
-export default async function AuthSuccessPage({
+async function AuthSuccessPageContent({
   searchParams,
 }: {
   searchParams: Promise<{ type?: string; role?: string }>
@@ -102,5 +107,17 @@ export default async function AuthSuccessPage({
         </p>
       </div>
     </div>
+  )
+}
+
+export default function AuthSuccessPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string; role?: string }>
+}) {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <AuthSuccessPageContent searchParams={searchParams} />
+    </Suspense>
   )
 } 

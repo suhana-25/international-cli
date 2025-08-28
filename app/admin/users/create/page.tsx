@@ -1,14 +1,19 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { adminOnly } from '@/lib/server-utils'
 import { APP_NAME } from '@/lib/constants'
 import CreateAdminForm from './create-admin-form'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `${APP_NAME} - Create Admin`,
   description: 'Create a new admin user',
 }
 
-export default async function CreateAdminPage() {
+async function CreateAdminPageContent() {
   await adminOnly()
 
   return (
@@ -21,6 +26,14 @@ export default async function CreateAdminPage() {
         <CreateAdminForm />
       </div>
     </div>
+  )
+}
+
+export default function CreateAdminPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <CreateAdminPageContent />
+    </Suspense>
   )
 }
 

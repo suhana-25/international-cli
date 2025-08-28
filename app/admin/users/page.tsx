@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import { getAllUsers } from '@/lib/user-store'
 import { adminOnly } from '@/lib/server-utils'
 import { Metadata } from 'next'
 import { APP_NAME } from '@/lib/constants'
 import UserManagementClient from './user-management-client'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
 
 export const metadata: Metadata = {
   title: `${APP_NAME} - User Management`,
@@ -13,7 +15,7 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export default async function AdminUsersPage({
+async function AdminUsersPageContent({
   searchParams,
 }: {
   searchParams: Promise<{ page: string }>
@@ -34,5 +36,17 @@ export default async function AdminUsersPage({
       users={users.data} 
       currentAdminId="admin-1" 
     />
+  )
+}
+
+export default function AdminUsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page: string }>
+}) {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <AdminUsersPageContent searchParams={searchParams} />
+    </Suspense>
   )
 }

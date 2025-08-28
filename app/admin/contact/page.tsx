@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
 // // import { auth } from '@/lib/auth' // Removed - using custom auth // Removed - using custom auth
 import { redirect } from 'next/navigation'
@@ -5,12 +6,16 @@ import { APP_NAME } from '@/lib/constants'
 import ContactForm from './contact-form'
 import ContactMessages from './contact-messages'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Contact Management - ${APP_NAME}`,
 }
 
-export default async function ContactManagementPage() {
+async function ContactManagementPageContent() {
   const session = null // Skip auth check - using custom auth system
   
   // if (!session?.user?.id || // session?.user.role !== 'admin') {
@@ -51,6 +56,14 @@ export default async function ContactManagementPage() {
         </Tabs>
       </div>
     </div>
+  )
+}
+
+export default function ContactManagementPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <ContactManagementPageContent />
+    </Suspense>
   )
 } 
 

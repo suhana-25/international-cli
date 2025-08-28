@@ -1,9 +1,13 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 import { APP_NAME } from '@/lib/constants'
 import ContactPageClient from './contact-page-client'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
 
 export const metadata: Metadata = {
   title: `Contact Us - ${APP_NAME}`,
@@ -17,5 +21,9 @@ export const metadata: Metadata = {
 }
 
 export default function ContactPage() {
-  return <ContactPageClient />
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <ContactPageClient />
+    </Suspense>
+  )
 } 

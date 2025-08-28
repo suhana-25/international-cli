@@ -1,12 +1,17 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { APP_NAME } from '@/lib/constants'
 import SignUpForm from './signup-form'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Sign Up - ${APP_NAME}`,
 }
 
-export default function SignUpPage() {
+function SignUpPageContent() {
   return (
     <div className="wrapper flex-center min-h-screen">
       <div className="w-full max-w-md space-y-8">
@@ -22,5 +27,13 @@ export default function SignUpPage() {
         <SignUpForm />
       </div>
     </div>
+  )
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <SignUpPageContent />
+    </Suspense>
   )
 }

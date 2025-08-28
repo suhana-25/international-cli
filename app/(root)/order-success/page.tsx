@@ -1,6 +1,11 @@
+import { Suspense } from 'react'
 import { APP_NAME } from '@/lib/constants'
 import { Metadata } from 'next'
 import OrderSuccessClient from './order-success-client'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Order Confirmation - ${APP_NAME}`,
@@ -12,7 +17,7 @@ interface OrderSuccessPageProps {
   }>
 }
 
-export default async function OrderSuccessPage({ searchParams }: OrderSuccessPageProps) {
+async function OrderSuccessPageContent({ searchParams }: OrderSuccessPageProps) {
   const params = await searchParams
   const { orderId } = params
 
@@ -24,5 +29,13 @@ export default async function OrderSuccessPage({ searchParams }: OrderSuccessPag
         </div>
       </div>
     </div>
+  )
+}
+
+export default function OrderSuccessPage({ searchParams }: OrderSuccessPageProps) {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <OrderSuccessPageContent searchParams={searchParams} />
+    </Suspense>
   )
 }

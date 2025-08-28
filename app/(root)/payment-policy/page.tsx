@@ -1,12 +1,17 @@
+import { Suspense } from 'react'
 import { APP_NAME } from '@/lib/constants'
 import type { Metadata } from 'next'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Payment Policy - ${APP_NAME}`,
   description: 'Learn about our payment methods, security, terms, and refund policy for crystal carvings and handicrafts.',
 }
 
-export default function PaymentPolicyPage() {
+function PaymentPolicyPageContent() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -211,5 +216,13 @@ export default function PaymentPolicyPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function PaymentPolicyPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <PaymentPolicyPageContent />
+    </Suspense>
   )
 }

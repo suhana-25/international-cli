@@ -1,6 +1,11 @@
+import { Suspense } from 'react'
 import SimpleChatWidget from '@/components/shared/chat/simple-chat-widget'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
 
-export default function ChatTestPage() {
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+function ChatTestPageContent() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
@@ -65,5 +70,13 @@ export default function ChatTestPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function ChatTestPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <ChatTestPageContent />
+    </Suspense>
   )
 }

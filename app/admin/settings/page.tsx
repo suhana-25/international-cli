@@ -1,4 +1,10 @@
-export default function AdminSettingsPage() {
+import { Suspense } from 'react'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+function AdminSettingsPageContent() {
   return (
     <div className="max-w-2xl mx-auto py-10 px-4">
       <h1 className="text-3xl font-bold mb-6">Admin Instructions & Documentation</h1>
@@ -36,5 +42,13 @@ export default function AdminSettingsPage() {
         <b>Note:</b> For any technical issues, contact your developer or check the project documentation.
       </div>
     </div>
+  )
+}
+
+export default function AdminSettingsPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <AdminSettingsPageContent />
+    </Suspense>
   )
 } 

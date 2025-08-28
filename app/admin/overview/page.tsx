@@ -1,4 +1,5 @@
 // import { auth } from '@/lib/auth' // Removed - using custom auth
+import { Suspense } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getOrderSummary } from '@/lib/actions/order.actions'
 import { APP_NAME } from '@/lib/constants'
@@ -16,12 +17,16 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import Link from 'next/link'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Admin Dashboard - ${APP_NAME}`,
 }
 
-export default async function DashboardPage() {
+async function DashboardPageContent() {
   await adminOnly()
   const summary = await getOrderSummary()
 
@@ -142,5 +147,13 @@ export default async function DashboardPage() {
         </Card>
       </div>
     </div>
+  )
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <DashboardPageContent />
+    </Suspense>
   )
 }

@@ -1,14 +1,19 @@
+import { Suspense } from 'react'
 // // import { auth } from '@/lib/auth' // Removed - using custom auth // Removed - using custom auth
 import { adminOnly } from '@/lib/server-utils'
 import { Metadata } from 'next'
 import { APP_NAME } from '@/lib/constants'
 import AdminManagementClient from './admin-management-client'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Admin Management - ${APP_NAME}`,
 }
 
-export default async function AdminManagementPage() {
+async function AdminManagementPageContent() {
   await adminOnly()
   const session = null // Skip auth check - using custom auth system
   
@@ -23,5 +28,13 @@ export default async function AdminManagementPage() {
       
       <AdminManagementClient currentAdminId="admin" />
     </div>
+  )
+}
+
+export default function AdminManagementPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <AdminManagementPageContent />
+    </Suspense>
   )
 } 

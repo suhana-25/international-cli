@@ -1,6 +1,12 @@
+import { Suspense } from 'react'
+import PlaceOrderClient from './place-order-client'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
 import { APP_NAME } from '@/lib/constants'
 import { Metadata } from 'next'
-import PlaceOrderForm from './place-order-form'
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: `Review Order - ${APP_NAME}`,
@@ -8,19 +14,9 @@ export const metadata: Metadata = {
 
 export default function PlaceOrderPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl font-poppins font-bold text-foreground mb-3 tracking-tight">Review Your Order</h1>
-            <p className="text-muted-foreground font-inter">
-              Please review your order details before proceeding to payment
-            </p>
-          </div>
-          <PlaceOrderForm />
-        </div>
-      </div>
-    </div>
+    <Suspense fallback={<LoadingSpinner />}>
+      <PlaceOrderClient />
+    </Suspense>
   )
 }
 
