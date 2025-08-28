@@ -3,6 +3,9 @@ import { db } from '@/lib/db'
 import { products, categories, gallery, blogPosts, users, orders } from '@/db/schema'
 import { desc, gt } from 'drizzle-orm'
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic'
+
 // Polling endpoint for sync events when WebSocket is not available
 export async function GET(request: NextRequest) {
   try {
