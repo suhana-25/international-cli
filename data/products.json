@@ -1,0 +1,80 @@
+[
+  {
+    "name": "certificate",
+    "slug": "certificate",
+    "description": "was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "price": 100.31,
+    "weight": 1.7,
+    "stock": 4,
+    "images": [
+      "https://utfs.io/f/8zLiAvVI5D4UPCKX4bchecDGE5vrsF1w0adhOQJ9oLXIpTlY"
+    ],
+    "bannerImages": [
+      "https://utfs.io/f/8zLiAvVI5D4UrZC8JRiUR1P0CpStcBufdN8qam6yDnxzOjlK"
+    ],
+    "categoryId": null,
+    "categoryIds": [
+      "1755756004619794xrvkyl"
+    ],
+    "brand": "NiteshHandicraft",
+    "isFeatured": true,
+    "isBanner": true,
+    "rating": null,
+    "numReviews": null,
+    "id": "1755756004677",
+    "createdAt": "2025-08-21T06:00:04.677Z",
+    "updatedAt": "2025-08-21T06:00:04.677Z"
+  },
+  {
+    "name": "Batman",
+    "slug": "batman",
+    "description": "The error.tsx file can be used to define a UI boundary for a route segment. It serves as a catch-all for unexpected errors and allows you to display a fallback UI to your users.",
+    "price": 22.22,
+    "weight": 2.4,
+    "stock": 6,
+    "images": [
+      "https://utfs.io/f/8zLiAvVI5D4UBsEuGMRAj9kDN1hzG8pX0c5lEvtamgSILFru"
+    ],
+    "bannerImages": [
+      "https://utfs.io/f/8zLiAvVI5D4UZv7qt1c17G0vLTOQubZtmP8BKMlqJIV2jrXh"
+    ],
+    "categoryId": null,
+    "categoryIds": [
+      "1755756004619794xrvkyl"
+    ],
+    "brand": "NiteshHandicraft",
+    "isFeatured": true,
+    "isBanner": true,
+    "rating": null,
+    "numReviews": null,
+    "id": "1755807035277",
+    "createdAt": "2025-08-21T20:10:35.277Z",
+    "updatedAt": "2025-08-21T20:10:35.277Z"
+  },
+  {
+    "name": "name",
+    "slug": "name-1",
+    "description": "PS C:\\Users\\Lenovo\\Downloads\\next-pg-shadcn-ecommerce> node scripts/test-product-operations.js\n🚀 Starting Product Operations Test...C:\\Users\\Lenovo\\Downloads\\next-pg-shadcn-ecommerce>",
+    "price": 22.22,
+    "weight": 2.3,
+    "stock": 2,
+    "images": [
+      "https://utfs.io/f/8zLiAvVI5D4UuDqDpe3NTvErsKL6Vg9HNGkAQFmofx2MXIRa"
+    ],
+    "bannerImages": [
+      "https://utfs.io/f/8zLiAvVI5D4UEP4MKtdYvUtSxbCuRNOj1J8HZ5Iidarh4BFq"
+    ],
+    "categoryId": null,
+    "categoryIds": [
+      "1755756004619794xrvkyl"
+    ],
+    "brand": "NiteshHandicraft",
+    "isFeatured": true,
+    "isBanner": true,
+    "rating": null,
+    "numReviews": null,
+    "id": "1756033394843",
+    "createdAt": "2025-08-24T11:03:14.843Z",
+    "updatedAt": "2025-08-24T11:03:14.843Z"
+  }
+]

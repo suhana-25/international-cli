@@ -1,0 +1,11 @@
+[
+  {
+    "id": "admin-1",
+    "name": "Admin User",
+    "email": "admin@niteshhandicraft.com",
+    "password": "$2b$10$ptEormwlQDuiaul.P3W6zOd4kA6j9qm7eYqAKPgSkx/M1.ao3bsw.",
+    "role": "super_admin",
+    "created_at": "2025-08-21T16:50:00.000Z",
+    "updated_at": "2025-08-21T17:01:15.715Z"
+  }
+]

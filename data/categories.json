@@ -1,0 +1,74 @@
+[
+  {
+    "id": "cat_001",
+    "name": "Crystal & Stone",
+    "slug": "crystal-stone",
+    "description": "Beautiful crystal and stone carvings and statues",
+    "createdAt": "2025-08-20T08:29:42.763Z",
+    "updatedAt": "2025-08-20T08:29:42.763Z"
+  },
+  {
+    "id": "cat_002",
+    "name": "Wooden Crafts",
+    "slug": "wooden-crafts",
+    "description": "Handcrafted wooden items and carvings",
+    "createdAt": "2025-08-20T08:29:42.763Z",
+    "updatedAt": "2025-08-20T08:29:42.763Z"
+  },
+  {
+    "id": "cat_003",
+    "name": "Pottery & Ceramics",
+    "slug": "pottery-ceramics",
+    "description": "Traditional pottery and ceramic items",
+    "createdAt": "2025-08-20T08:29:42.763Z",
+    "updatedAt": "2025-08-20T08:29:42.763Z"
+  },
+  {
+    "id": "cat_004",
+    "name": "Textiles",
+    "slug": "textiles",
+    "description": "Handwoven textiles and fabrics",
+    "createdAt": "2025-08-20T08:29:42.763Z",
+    "updatedAt": "2025-08-20T08:29:42.763Z"
+  },
+  {
+    "id": "cat_005",
+    "name": "Metal Art",
+    "slug": "metal-art",
+    "description": "Beautiful metal artwork and decorations",
+    "createdAt": "2025-08-20T08:29:42.763Z",
+    "updatedAt": "2025-08-20T08:29:42.763Z"
+  },
+  {
+    "id": "1755756004619794xrvkyl",
+    "name": "Murtiya",
+    "slug": "murtiya",
+    "description": "Auto-created category: Murtiya",
+    "createdAt": "2025-08-21T06:00:04.619Z",
+    "updatedAt": "2025-08-21T06:00:04.619Z"
+  },
+  {
+    "id": "1755782212839p9cde4rz8",
+    "name": "gadgets",
+    "slug": "gadgets",
+    "description": "Auto-created category: gadgets",
+    "createdAt": "2025-08-21T13:16:52.839Z",
+    "updatedAt": "2025-08-21T13:16:52.839Z"
+  },
+  {
+    "id": "1755964395847podnbda5c",
+    "name": "hello",
+    "slug": "hello",
+    "description": "Auto-created category: hello",
+    "createdAt": "2025-08-23T15:53:15.848Z",
+    "updatedAt": "2025-08-23T15:53:15.848Z"
+  },
+  {
+    "id": "1755964839398kiwyiuddp",
+    "name": "Edit categories here...",
+    "slug": "edit-categories-here",
+    "description": "Auto-created category: Edit categories here...",
+    "createdAt": "2025-08-23T16:00:39.399Z",
+    "updatedAt": "2025-08-23T16:00:39.399Z"
+  }
+]

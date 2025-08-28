@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: nitesh-handicraft
+    env: node
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: POSTGRES_URL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: NEXTAUTH_SECRET
+        value: "nitesh-handicraft-secret-key-2024"
+      - key: NEXTAUTH_URL
+        value: https://nitesh-handicraft.onrender.com
+      - key: PUSHER_APP_ID
+        value: "mock-pusher-id"
+      - key: PUSHER_KEY
+        value: "mock-pusher-key"
+      - key: PUSHER_SECRET
+        value: "mock-pusher-secret"
+      - key: UPLOADTHING_SECRET
+        value: "mock-uploadthing-secret"
+      - key: UPLOADTHING_APP_ID
+        value: "mock-uploadthing-id"

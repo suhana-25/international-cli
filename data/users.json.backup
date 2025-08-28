@@ -1,0 +1,67 @@
+[
+  {
+    "id": "user-1",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "$2b$10$sample.hash.for.user.password",
+    "role": "user",
+    "createdAt": "2025-08-21T16:50:00.000Z",
+    "updatedAt": "2025-08-21T16:50:00.000Z",
+    "lastSignIn": "2025-08-21T17:00:00.000Z",
+    "signInCount": 5
+  },
+  {
+    "id": "user-2",
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "password": "$2b$10$sample.hash.for.user.password",
+    "role": "user",
+    "createdAt": "2025-08-21T16:55:00.000Z",
+    "updatedAt": "2025-08-21T16:55:00.000Z",
+    "lastSignIn": "2025-08-21T16:58:00.000Z",
+    "signInCount": 3
+  },
+  {
+    "id": "user-3",
+    "name": "Bob Wilson",
+    "email": "bob@example.com",
+    "password": "$2b$10$sample.hash.for.user.password",
+    "role": "moderator",
+    "createdAt": "2025-08-21T16:45:00.000Z",
+    "updatedAt": "2025-08-21T16:45:00.000Z",
+    "lastSignIn": "2025-08-21T17:02:00.000Z",
+    "signInCount": 12
+  },
+  {
+    "id": "user-4",
+    "name": "Lakshya Bhardwaj",
+    "email": "lakshyabhardwaj125@gmail.com",
+    "password": "$2b$10$6Hxgb3tzW3NyxhSSH2tEM.qzeE/xIz9zbvdply0R1hQHpdP4LY6BS",
+    "role": "user",
+    "createdAt": "2025-08-21T17:30:00.000Z",
+    "updatedAt": "2025-08-21T18:32:19.048Z",
+    "lastSignIn": "2025-08-21T18:32:19.048Z",
+    "signInCount": 2,
+    "updated_at": "2025-08-21T18:17:08.675Z"
+  },
+  {
+    "id": "test-user-1755861424018",
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "role": "user",
+    "createdAt": "2025-08-22T11:17:04.018Z",
+    "updatedAt": "2025-08-22T11:17:04.019Z",
+    "signInCount": 0
+  },
+  {
+    "name": "Dushyant Khandelwal",
+    "email": "4665@gmail.com",
+    "password": "$2b$10$VguYgMs2Ci.di./KqPJG5eqv2ObigcOqNcaG6mvKYJajBXK0Pz04O",
+    "role": "user",
+    "id": "1755965306602dxk37t0oh",
+    "createdAt": "2025-08-23T16:08:26.602Z",
+    "updatedAt": "2025-08-23T16:08:26.602Z",
+    "signInCount": 0
+  }
+]
