@@ -4,7 +4,6 @@ const nextConfig = {
     optimizePackageImports: ['swr', 'lucide-react', 'framer-motion'],
     // Enable concurrent features for instant responses
     serverComponentsExternalPackages: ['sharp'],
-
   },
   
   // Aggressive compression and optimization
@@ -95,8 +94,11 @@ const nextConfig = {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
   
-  // Output configuration for deployment
+  // Output configuration for deployment - FIXED FOR RENDER
   output: 'standalone',
+  
+  // Disable static export for dynamic routes
+  trailingSlash: false,
   
   // Reduce build time and improve performance
   swcMinify: true,
