@@ -7,19 +7,50 @@ import * as schema from '@/db/schema'
 // Configure Neon for better performance
 neonConfig.fetchConnectionCache = true
 
-// Database connection configuration
-const connectionString = process.env.POSTGRES_URL
+// Check if we're in build mode - more reliable check
+const isBuildTime = process.env.NODE_ENV === 'production' && (
+  !process.env.POSTGRES_URL || 
+  process.env.POSTGRES_URL === 'mock-url' ||
+  process.env.RENDER === 'true'
+)
 
-if (!connectionString) {
-  throw new Error('POSTGRES_URL environment variable is not set')
+// Database connection configuration
+let dbInstance: ReturnType<typeof drizzle> | null = null
+
+// Lazy database connection - only connect when actually needed
+export function getDb() {
+  // During build time, return a mock db to prevent connection attempts
+  if (isBuildTime) {
+    console.log('🚀 Production deployment mode - returning empty comments array')
+    return {} as ReturnType<typeof drizzle>
+  }
+  
+  if (!dbInstance) {
+    const connectionString = process.env.POSTGRES_URL
+    
+    if (!connectionString) {
+      throw new Error('POSTGRES_URL environment variable is not set')
+    }
+    
+    console.log('🔗 Connecting to PostgreSQL database...')
+    dbInstance = drizzle(neon(connectionString), { schema })
+    console.log('✅ Database connection established')
+  }
+  
+  return dbInstance
 }
 
-// Create database instance with schema
-export const db = drizzle(neon(connectionString), { schema })
+// Export db for backward compatibility, but it will be lazy
+export const db = new Proxy({} as ReturnType<typeof drizzle>, {
+  get(target, prop) {
+    return getDb()[prop as keyof ReturnType<typeof drizzle>]
+  }
+})
 
 // Health check function
 export async function checkDatabaseHealth() {
   try {
+    const db = getDb()
     // Test connection with a simple query
     const result = await db.select({ count: schema.products.id }).from(schema.products).limit(1)
     return {
@@ -42,7 +73,10 @@ export async function checkDatabaseHealth() {
 // Connection management
 export async function closeDatabaseConnection() {
   try {
-    console.log('✅ Database connection closed')
+    if (dbInstance) {
+      console.log('✅ Database connection closed')
+      dbInstance = null
+    }
   } catch (error) {
     console.error('❌ Error closing database connection:', error)
   }

@@ -3,6 +3,18 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['swr', 'lucide-react', 'framer-motion'],
     serverComponentsExternalPackages: ['sharp'],
+    // Memory optimization
+    memoryBasedWorkers: true,
+    workerThreads: false,
+    // Disable heavy features during build
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
   },
   // Disable static export completely for Render deployment
   output: 'standalone',
@@ -33,13 +45,35 @@ const nextConfig = {
     ]
   },
   // Disable webpack optimization that might cause static generation
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.optimization = {
-        ...config.optimization,
-        splitChunks: false,
-      }
+  webpack: (config, { isServer, dev }) => {
+    // Memory optimization for all builds
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: false,
+      minimize: false,
+      concatenateModules: false,
+      // Reduce memory usage
+      moduleIds: 'named',
+      chunkIds: 'named',
     }
+    
+    // Disable heavy loaders during build
+    if (!dev) {
+      config.module.rules.forEach((rule) => {
+        if (rule.use && Array.isArray(rule.use)) {
+          rule.use.forEach((use) => {
+            if (use.loader && use.loader.includes('babel-loader')) {
+              use.options = {
+                ...use.options,
+                compact: false,
+                cacheDirectory: false,
+              }
+            }
+          })
+        }
+      })
+    }
+    
     return config
   },
   // Environment variables
@@ -58,6 +92,9 @@ const nextConfig = {
   swcMinify: false,
   // Disable compression
   compress: false,
+  // Memory optimization
+  poweredByHeader: false,
+  generateEtags: false,
 }
 
 export default nextConfig
