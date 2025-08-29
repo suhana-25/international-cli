@@ -7,6 +7,7 @@ services:
           export NODE_OPTIONS="--max-old-space-size=256"
           npm install --no-optional --no-audit --production=false --no-fund
           npm run build
+          cp -r out/* public/
         startCommand: npm start
         envVars:
           - key: NODE_ENV
