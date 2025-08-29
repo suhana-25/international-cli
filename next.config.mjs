@@ -119,8 +119,6 @@ const nextConfig = {
   generateEtags: false,
   // Disable source maps
   productionBrowserSourceMaps: false,
-  // Disable bundle analyzer
-  bundleAnalyzer: false,
   // Disable all optimizations
   optimizeFonts: false,
   reactStrictMode: false,
