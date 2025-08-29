@@ -5,6 +5,13 @@ const nextConfig = {
   trailingSlash: true,
   distDir: 'out',
   
+  // Force export to out directory
+  experimental: {
+    forceSwcTransforms: false,
+    swcTraceProfiling: false,
+    outputFileTracingRoot: process.cwd(),
+  },
+  
   // Disable all features that cause build issues
   images: {
     unoptimized: true,

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "cross-env NODE_OPTIONS=--max-old-space-size=64 next export --outdir out",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=64 next export",
     "start": "next start",
     "lint": "next lint",
     "email": "cp .env.local ./node_modules/react-email && email dev --dir email --port 3001",
