@@ -3,9 +3,6 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['swr', 'lucide-react', 'framer-motion'],
     serverComponentsExternalPackages: ['sharp'],
-    // Memory optimization
-    memoryBasedWorkers: true,
-    workerThreads: false,
     // Disable heavy features during build
     turbo: {
       rules: {
