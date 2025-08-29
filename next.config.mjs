@@ -49,6 +49,12 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  
+  // Disable static generation completely
+  generateStaticParams: async () => [],
+  
+  // Force dynamic rendering
+  dynamicParams: false,
 }
 
 export default nextConfig
