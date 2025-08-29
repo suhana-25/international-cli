@@ -1,8 +1,5 @@
-// Simple user storage for admin-managed users
-// Direct file operations without complex sync for reliability
-
-import fs from 'fs'
-import path from 'path'
+// Client-safe user store that calls API endpoints
+// No file system operations - all data handled via HTTP requests
 
 export interface User {
   id: string
@@ -15,182 +12,110 @@ export interface User {
   signInCount: number
 }
 
-// File-based storage path
-const STORAGE_PATH = path.join(process.cwd(), 'data', 'users.json')
+// API base URL
+const API_BASE = '/api/users'
 
-// Ensure data directory exists
-const ensureDataDir = () => {
-  const dataDir = path.join(process.cwd(), 'data')
-  if (!fs.existsSync(dataDir)) {
-    try {
-      fs.mkdirSync(dataDir, { recursive: true, mode: 0o755 })
-      console.log('✅ Data directory created successfully')
-    } catch (error) {
-      console.error('❌ Error creating data directory:', error)
-    }
+// Helper function to handle API responses
+const handleResponse = async (response: Response) => {
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Network error' }))
+    throw new Error(error.error || `HTTP ${response.status}`)
   }
-}
-
-// Simple file operations
-const readUsersFile = (): User[] => {
-  try {
-    ensureDataDir()
-    if (fs.existsSync(STORAGE_PATH)) {
-      const data = fs.readFileSync(STORAGE_PATH, 'utf8')
-      const users = JSON.parse(data)
-      // Parse dates and ensure all required fields exist
-      return users.map((u: any) => ({
-        ...u,
-        role: u.role || 'user',
-        signInCount: u.signInCount || 0,
-        createdAt: new Date(u.createdAt),
-        updatedAt: new Date(u.updatedAt),
-        lastSignIn: u.lastSignIn ? new Date(u.lastSignIn) : undefined
-      }))
-    }
-  } catch (error) {
-    console.error('❌ Error reading users file:', error)
-  }
-  return []
-}
-
-const writeUsersFile = (users: User[]): boolean => {
-  try {
-    ensureDataDir()
-    
-    // Create backup before writing
-    if (fs.existsSync(STORAGE_PATH)) {
-      const backupPath = STORAGE_PATH + '.backup'
-      fs.copyFileSync(STORAGE_PATH, backupPath)
-    }
-    
-    // Write with atomic operation
-    const tempPath = STORAGE_PATH + '.tmp'
-    fs.writeFileSync(tempPath, JSON.stringify(users, null, 2))
-    fs.renameSync(tempPath, STORAGE_PATH)
-    
-    console.log(`✅ Users saved successfully: ${users.length} users`)
-    return true
-  } catch (error) {
-    console.error('❌ Error saving users:', error)
-    return false
-  }
-}
-
-// In-memory storage
-let users: User[] = readUsersFile()
-
-// Force reload users from file
-export const reloadUsers = (): User[] => {
-  console.log('🔄 Force reloading users from file...')
-  users = readUsersFile()
-  console.log(`✅ Reloaded ${users.length} users`)
-  return users
+  return response.json()
 }
 
 // User functions
-export const getUsers = (): User[] => {
-  // Always get fresh data from file
-  users = readUsersFile()
-  return users
-}
-
-export const getUserById = (id: string): User | null => {
-  const freshUsers = readUsersFile()
-  return freshUsers.find(user => user.id === id) || null
-}
-
-export const getUserByEmail = (email: string): User | null => {
-  const freshUsers = readUsersFile()
-  return freshUsers.find(user => user.email.toLowerCase() === email.toLowerCase()) || null
-}
-
-export const createUser = (data: Omit<User, 'id' | 'createdAt' | 'updatedAt' | 'signInCount'>): User => {
-  // Get fresh data
-  users = readUsersFile()
-  
-  const newUser: User = {
-    ...data,
-    id: Date.now().toString(),
-    signInCount: 0,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }
-  
-  users.push(newUser)
-  
-  // Save to file
-  if (writeUsersFile(users)) {
-    console.log(`✅ User created: ${newUser.email} (ID: ${newUser.id})`)
-    console.log(`👥 Total users after creation: ${users.length}`)
-  } else {
-    console.error('❌ Failed to save user to file')
-  }
-  
-  return newUser
-}
-
-export const updateUser = (id: string, data: Partial<User>): User | null => {
-  users = readUsersFile()
-  const index = users.findIndex(user => user.id === id)
-  if (index === -1) return null
-  
-  users[index] = {
-    ...users[index],
-    ...data,
-    updatedAt: new Date(),
-  }
-  
-  if (writeUsersFile(users)) {
-    console.log(`✅ User updated: ${users[index].email}`)
-  }
-  
-  return users[index]
-}
-
-export const deleteUser = (id: string): boolean => {
+export const getUsers = async (): Promise<User[]> => {
   try {
-    console.log(`🔍 Attempting to delete user with ID: ${id}`)
-    
-    // Get fresh data
-    users = readUsersFile()
-    console.log(`👥 Current users: ${users.length}`)
-    
-    const index = users.findIndex(user => user.id === id)
-    if (index === -1) {
-      console.log(`❌ User with ID ${id} not found`)
-      return false
-    }
-    
-    console.log(`🗑️ Found user at index ${index}, deleting...`)
-    const deletedUser = users[index]
-    users.splice(index, 1)
-    
-    // Save to file
-    if (writeUsersFile(users)) {
-      console.log(`✅ User deleted: ${deletedUser.email}`)
-      console.log(`👥 Remaining users: ${users.length}`)
-      return true
-    } else {
-      console.error('❌ Failed to save after deletion')
-      return false
-    }
-    
+    const response = await fetch(API_BASE)
+    const data = await handleResponse(response)
+    return data.users || []
   } catch (error) {
-    console.error(`❌ Error in deleteUser for ID ${id}:`, error)
+    console.error('❌ Error fetching users:', error)
+    return []
+  }
+}
+
+export const getUserById = async (id: string): Promise<User | null> => {
+  try {
+    const response = await fetch(`${API_BASE}?id=${id}`)
+    const data = await handleResponse(response)
+    return data.user || null
+  } catch (error) {
+    console.error('❌ Error fetching user by ID:', error)
+    return null
+  }
+}
+
+export const getUserByEmail = async (email: string): Promise<User | null> => {
+  try {
+    const users = await getUsers()
+    return users.find(user => user.email.toLowerCase() === email.toLowerCase()) || null
+  } catch (error) {
+    console.error('❌ Error fetching user by email:', error)
+    return null
+  }
+}
+
+export const createUser = async (data: Omit<User, 'id' | 'createdAt' | 'updatedAt' | 'signInCount'>): Promise<User | null> => {
+  try {
+    const response = await fetch(API_BASE, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    
+    const result = await handleResponse(response)
+    return result.user || null
+  } catch (error) {
+    console.error('❌ Error creating user:', error)
+    return null
+  }
+}
+
+export const updateUser = async (id: string, data: Partial<User>): Promise<User | null> => {
+  try {
+    const response = await fetch(API_BASE, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id, ...data }),
+    })
+    
+    const result = await handleResponse(response)
+    return result.user || null
+  } catch (error) {
+    console.error('❌ Error updating user:', error)
+    return null
+  }
+}
+
+export const deleteUser = async (id: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`${API_BASE}?id=${id}`, {
+      method: 'DELETE',
+    })
+    
+    await handleResponse(response)
+    return true
+  } catch (error) {
+    console.error('❌ Error deleting user:', error)
     return false
   }
 }
 
-export const updateLastSignIn = (email: string): boolean => {
+export const updateLastSignIn = async (email: string): Promise<boolean> => {
   try {
-    users = readUsersFile()
-    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase())
+    const user = await getUserByEmail(email)
     if (user) {
-      user.lastSignIn = new Date()
-      user.signInCount = (user.signInCount || 0) + 1
-      user.updatedAt = new Date()
-      return writeUsersFile(users)
+      const updated = await updateUser(user.id, {
+        lastSignIn: new Date(),
+        signInCount: (user.signInCount || 0) + 1,
+      })
+      return updated !== null
     }
     return false
   } catch (error) {
@@ -199,9 +124,9 @@ export const updateLastSignIn = (email: string): boolean => {
   }
 }
 
-export const initializeDefaultAdmin = (): User | null => {
+export const initializeDefaultAdmin = async (): Promise<User | null> => {
   try {
-    users = readUsersFile()
+    const users = await getUsers()
     
     // Check if admin already exists
     const existingAdmin = users.find(u => u.role === 'admin')
@@ -211,19 +136,13 @@ export const initializeDefaultAdmin = (): User | null => {
     }
     
     // Create default admin
-    const defaultAdmin: User = {
-      id: Date.now().toString(),
+    const defaultAdmin = await createUser({
       email: 'admin@niteshhandicraft.com',
       name: 'Admin',
       role: 'admin',
-      signInCount: 0,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }
+    })
     
-    users.push(defaultAdmin)
-    
-    if (writeUsersFile(users)) {
+    if (defaultAdmin) {
       console.log('✅ Default admin user created')
       return defaultAdmin
     } else {
@@ -237,55 +156,78 @@ export const initializeDefaultAdmin = (): User | null => {
 }
 
 // Additional functions needed by the system
-export const getAllUsers = (options?: { page?: number; limit?: number }) => {
-  const page = options?.page || 1
-  const limit = options?.limit || 50
-  const offset = (page - 1) * limit
-  
-  const allUsers = getUsers()
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(offset, offset + limit)
-    .map(user => ({
-      ...user,
-      createdAt: user.createdAt.toISOString(),
-      updatedAt: user.updatedAt.toISOString(),
-      lastSignIn: user.lastSignIn?.toISOString()
-    }))
-  
-  return {
-    data: allUsers,
-    totalPages: Math.ceil(getUsers().length / limit),
-    currentPage: page,
-    totalUsers: getUsers().length
+export const getAllUsers = async (options?: { page?: number; limit?: number }) => {
+  try {
+    const page = options?.page || 1
+    const limit = options?.limit || 50
+    const offset = (page - 1) * limit
+    
+    const allUsers = await getUsers()
+    const sortedUsers = allUsers
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(offset, offset + limit)
+      .map(user => ({
+        ...user,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt.toISOString(),
+        lastSignIn: user.lastSignIn?.toISOString()
+      }))
+    
+    return {
+      data: sortedUsers,
+      totalPages: Math.ceil(allUsers.length / limit),
+      currentPage: page,
+      totalUsers: allUsers.length
+    }
+  } catch (error) {
+    console.error('❌ Error getting all users:', error)
+    return {
+      data: [],
+      totalPages: 0,
+      currentPage: options?.page || 1,
+      totalUsers: 0
+    }
   }
 }
 
-export const updateUserRole = (id: string, newRole: 'user' | 'admin' | 'moderator'): User | null => {
-  const user = getUserById(id)
-  if (!user) return null
-  
-  return updateUser(id, { role: newRole })
+export const updateUserRole = async (id: string, newRole: 'user' | 'admin' | 'moderator'): Promise<User | null> => {
+  try {
+    const user = await getUserById(id)
+    if (!user) return null
+    
+    return await updateUser(id, { role: newRole })
+  } catch (error) {
+    console.error('❌ Error updating user role:', error)
+    return null
+  }
 }
 
-export const recordUserSignIn = (email: string): User | null => {
+export const recordUserSignIn = async (email: string): Promise<User | null> => {
   try {
-    users = readUsersFile()
-    
-    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase())
+    const user = await getUserByEmail(email)
     if (!user) return null
     
     // Update sign in stats
-    user.lastSignIn = new Date()
-    user.signInCount = (user.signInCount || 0) + 1
-    user.updatedAt = new Date()
+    const updated = await updateUser(user.id, {
+      lastSignIn: new Date(),
+      signInCount: (user.signInCount || 0) + 1,
+    })
     
-    if (writeUsersFile(users)) {
+    if (updated) {
       console.log(`✅ User sign in recorded for: ${email}`)
-      return user
+      return updated
     }
     return null
   } catch (error) {
     console.error('❌ Error recording user sign in:', error)
     return null
   }
+}
+
+// Force reload users from API (for admin panel refresh)
+export const reloadUsers = async (): Promise<User[]> => {
+  console.log('🔄 Force reloading users from API...')
+  const users = await getUsers()
+  console.log(`✅ Reloaded ${users.length} users`)
+  return users
 }
