@@ -52,6 +52,10 @@ const nextConfig = {
       // Reduce memory usage
       moduleIds: 'named',
       chunkIds: 'named',
+      // More aggressive memory optimization
+      removeAvailableModules: false,
+      removeEmptyChunks: false,
+      mergeDuplicateChunks: false,
     }
     
     // Disable heavy loaders during build
@@ -69,6 +73,17 @@ const nextConfig = {
           })
         }
       })
+    }
+    
+    // Disable source maps to save memory
+    config.devtool = false
+    
+    // Reduce memory usage in development
+    if (dev) {
+      config.watchOptions = {
+        ignored: /node_modules/,
+        poll: false,
+      }
     }
     
     return config
@@ -92,6 +107,10 @@ const nextConfig = {
   // Memory optimization
   poweredByHeader: false,
   generateEtags: false,
+  // Disable source maps
+  productionBrowserSourceMaps: false,
+  // Disable bundle analyzer
+  bundleAnalyzer: false,
 }
 
 export default nextConfig
