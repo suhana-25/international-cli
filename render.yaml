@@ -4,7 +4,7 @@ services:
     env: node
     plan: starter
     buildCommand: |
-      export NODE_OPTIONS="--max-old-space-size=2048"
+      export NODE_OPTIONS="--max-old-space-size=1024"
       npm install --no-optional --no-audit --production=false
       npm run build
     startCommand: npm start
@@ -12,7 +12,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: NODE_OPTIONS
-        value: "--max-old-space-size=2048"
+        value: "--max-old-space-size=1024"
       - key: POSTGRES_URL
         sync: false
       - key: DATABASE_URL

@@ -56,6 +56,10 @@ const nextConfig = {
       removeAvailableModules: false,
       removeEmptyChunks: false,
       mergeDuplicateChunks: false,
+      // Disable all optimizations
+      sideEffects: false,
+      usedExports: false,
+      providedExports: false,
     }
     
     // Disable heavy loaders during build
@@ -86,6 +90,12 @@ const nextConfig = {
       }
     }
     
+    // Disable all plugins that consume memory
+    config.plugins = config.plugins.filter(plugin => {
+      const pluginName = plugin.constructor.name
+      return !['BundleAnalyzerPlugin', 'ForkTsCheckerWebpackPlugin'].includes(pluginName)
+    })
+    
     return config
   },
   // Environment variables
@@ -111,6 +121,11 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
   // Disable bundle analyzer
   bundleAnalyzer: false,
+  // Disable all optimizations
+  optimizeFonts: false,
+  reactStrictMode: false,
+  // Disable static generation completely
+  staticPageGenerationTimeout: 0,
 }
 
 export default nextConfig
