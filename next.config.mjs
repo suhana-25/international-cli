@@ -1,16 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Completely disable Next.js build system
-  output: 'export',
-  trailingSlash: true,
-  distDir: 'out',
-  
-  // Force export to out directory
-  experimental: {
-    forceSwcTransforms: false,
-    swcTraceProfiling: false,
-    outputFileTracingRoot: process.cwd(),
-  },
+  // Disable all Next.js features
+  output: 'standalone',
+  trailingSlash: false,
   
   // Disable all features that cause build issues
   images: {
@@ -56,12 +48,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  
-  // Disable static generation completely
-  generateStaticParams: async () => [],
-  
-  // Force dynamic rendering
-  dynamicParams: false,
 }
 
 export default nextConfig
