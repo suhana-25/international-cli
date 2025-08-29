@@ -58,7 +58,14 @@ export async function middleware(request: NextRequest) {
   //   return response
   // }
 
-  return NextResponse.next()
+  // Force dynamic rendering for all routes
+  const response = NextResponse.next()
+  response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+  response.headers.set('Pragma', 'no-cache')
+  response.headers.set('Expires', '0')
+  response.headers.set('x-nextjs-cache', 'SKIP')
+  
+  return response
 }
 
 export const config = {

@@ -68,6 +68,7 @@ export async function signUp(prevState: unknown, formData: FormData) {
     }
   }
 }
+
 export async function signInWithCredentials(
   prevState: unknown,
   formData: FormData
@@ -100,7 +101,7 @@ export const SignInWithEmail = async (formData: any) => {
 }
 
 export const SignInWithGoogle = async () => {
-  // Skip NextAuth signIn - using custom auth system  
+  // Skip NextAuth signIn - using custom auth system
   console.log('SignInWithGoogle: Using custom auth system instead')
 }
 
@@ -115,6 +116,7 @@ export const SignOut = async () => {
     throw error
   }
 }
+
 // GET
 export async function getAllUsers({
   limit = PAGE_SIZE,
@@ -153,7 +155,6 @@ export async function getUserById(userId: string) {
 }
 
 // DELETE
-
 export async function deleteUser(id: string) {
   try {
     await db.delete(users).where(eq(users.id, id))
@@ -172,16 +173,13 @@ export async function updateUserRole(userId: string, newRole: string) {
   try {
     await db
       .update(users)
-      .set({
-        role: newRole,
-        updatedAt: new Date(),
-      })
+      .set({ role: newRole as any })
       .where(eq(users.id, userId))
     
     revalidatePath('/admin/users')
     return {
       success: true,
-      message: `User role updated to ${newRole} successfully`,
+      message: 'User role updated successfully',
     }
   } catch (error) {
     return { success: false, error: formatError(error) }

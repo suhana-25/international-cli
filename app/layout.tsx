@@ -1,14 +1,12 @@
-import { Inter } from 'next/font/google'
 import './globals.css'
 import Providers from '../components/providers'
 import { Toaster } from '@/components/ui/toaster'
 
-const inter = Inter({ 
-  subsets: ['latin'],
-  display: 'swap',
-  preload: true,
-  fallback: ['system-ui', 'arial']
-})
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+export const fetchCache = 'force-no-store'
+export const runtime = 'nodejs'
+export const preferredRegion = 'auto'
 
 export const metadata = {
   title: 'Nitesh Handicraft - Premium Handcrafted Art & Statues',
@@ -80,8 +78,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         {/* Performance optimization preconnects */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.niteshhandicraft.com" />
         
         {/* DNS prefetch for external resources */}
@@ -119,7 +115,7 @@ export default function RootLayout({
         {/* Security headers */}
         <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
       </head>
-      <body className={inter.className}>
+      <body className="font-sans antialiased">
         <Providers>
           {children}
           <Toaster />

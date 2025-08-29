@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { getAllUsers } from '@/lib/user-store'
+import { getAllUsers } from '@/lib/actions/user.actions'
 import { adminOnly } from '@/lib/server-utils'
 import { Metadata } from 'next'
 import { APP_NAME } from '@/lib/constants'
@@ -23,19 +23,40 @@ async function AdminUsersPageContent({
   const params = await searchParams
   await adminOnly()
   
-  // Get users from file-based storage
-  const users = getAllUsers({
-    page: Number(params.page || '1'),
+  // Get users from database
+  const users = await getAllUsers({
+    page: parseInt(params.page) || 1,
+    limit: 50
   })
 
-  console.log('👥 Admin users page - fetched users:', users.data.length)
-  console.log('👥 Admin users page - user list preview:', users.data.map((u: any) => ({ id: u.id, email: u.email, name: u.name, role: u.role })))
-
   return (
-    <UserManagementClient 
-      users={users.data} 
-      currentAdminId="admin-1" 
-    />
+    <div className="min-h-screen bg-slate-950 p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-white tracking-tight">User Management</h1>
+            <p className="text-slate-400">
+              Manage user roles, permissions, and account settings
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-slate-400">
+              Total Users: {users?.data?.length || 0}
+            </div>
+          </div>
+        </div>
+
+        <UserManagementClient 
+          currentAdminId="admin" 
+          initialUsers={{
+            data: users?.data || [],
+            totalPages: users?.totalPages || 1,
+            currentPage: parseInt(params.page) || 1,
+            totalUsers: users?.data?.length || 0
+          }}
+        />
+      </div>
+    </div>
   )
 }
 
