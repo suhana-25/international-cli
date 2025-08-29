@@ -7,7 +7,7 @@ services:
           export NODE_OPTIONS="--max-old-space-size=64"
           npm install --no-optional --no-audit --production=false --no-fund --no-optional
           npm run build
-        startCommand: npm start
+        startCommand: npx serve out -p $PORT
         envVars:
           - key: NODE_ENV
             value: production

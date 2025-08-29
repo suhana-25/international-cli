@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "bash build.sh",
-    "start": "next start",
+    "start": "npx serve out -p $PORT",
     "lint": "next lint",
     "email": "cp .env.local ./node_modules/react-email && email dev --dir email --port 3001",
     "db:generate": "drizzle-kit generate",
@@ -83,7 +83,8 @@
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^7.7.3",
     "vaul": "^0.9.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "serve": "^14.2.1"
   },
   "devDependencies": {
     "@next/env": "^14.2.3",
